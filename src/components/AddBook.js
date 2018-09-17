@@ -20,12 +20,15 @@ class AddBook extends Component {
       price: 0,
       pages: 0,
       publisher: "",
-      release_date: new Date().toISOString().split("T")[0],
-      stock_available: false,
-      condition: "",
+      release_date: "",
+      stock_available: true,
+      condition: "New",
       genre: "",
       rating: 0.0,
-      book_title: ""
+      title: "",
+      category: "",
+      sub_category: "",
+      category_tags: []
     };
   }
 
@@ -33,6 +36,37 @@ class AddBook extends Component {
     this.setState({
       [e.target.id]: e.target.value
     });
+  };
+
+  onChangeRadio = e => {
+    if (e.target.id === "option1") {
+      this.setState({
+        stock_available: true
+      });
+    } else {
+      this.setState({
+        stock_available: false
+      });
+    }
+  };
+
+  handleCategoryTags = e => {
+    let categoryTag = e.target.value.split(",");
+    this.setState({
+      category_tags: categoryTag
+    });
+  };
+
+  onChangeCondition = e => {
+    if (e.target.id === "condition1") {
+      this.setState({
+        condition: "New"
+      });
+    } else {
+      this.setState({
+        condition: "Old"
+      });
+    }
   };
 
   handleFormSubmit = e => {
@@ -54,12 +88,15 @@ class AddBook extends Component {
       price: 0,
       pages: 0,
       publisher: "",
-      release_date: new Date().toISOString().split("T")[0],
-      stock_available: false,
-      condition: "",
+      release_date: "",
+      stock_available: true,
+      condition: "New",
       genre: "",
       rating: 0.0,
-      book_title: ""
+      title: "",
+      category: "",
+      sub_category: "",
+      category_tags: []
     });
   };
 
@@ -68,6 +105,17 @@ class AddBook extends Component {
       <div className="pt-4">
         <form>
           <div className="form-row">
+            <div className="form-group col-md-4">
+              <label htmlFor="title">Book Title</label>
+              <input
+                type="text"
+                className="form-control"
+                id="title"
+                placeholder="Enter Book Title"
+                value={this.state.title}
+                onChange={this.handleInputChange}
+              />
+            </div>
             <div className="form-group col-md-4">
               <label htmlFor="author">Author</label>
               <input
@@ -79,17 +127,7 @@ class AddBook extends Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <div className="form-group col-md-4">
-              <label htmlFor="book_title">Book Title</label>
-              <input
-                type="text"
-                className="form-control"
-                id="book_title"
-                placeholder="Enter Book Title"
-                value={this.state.book_title}
-                onChange={this.handleInputChange}
-              />
-            </div>
+
             <div className="form-group col-md-4">
               <label htmlFor="book_sku">Book Sku</label>
               <input
@@ -244,12 +282,170 @@ class AddBook extends Component {
           </div>
 
           <div className="form-group">
+            <label htmlFor="release_date">Release Date</label>
             <input
-              type="date"
+              type="string"
               className="form-control"
               id="release_date"
+              placeholder={new Date().toISOString().split("T")[0]}
               value={this.state.release_date}
               onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="form-row">
+            <div className="form-group col-md-6">
+              <label htmlFor="">Stock Available &ensp; </label>
+              <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                <label
+                  className={
+                    this.state.stock_available
+                      ? "btn btn-primary active"
+                      : "btn btn-secondary"
+                  }
+                >
+                  <input
+                    type="radio"
+                    name="options"
+                    id="option1"
+                    autocomplete="off"
+                    checked={this.state.stock_available}
+                    onClick={this.onChangeRadio}
+                  />{" "}
+                  Yes
+                </label>
+                <label
+                  className={
+                    !this.state.stock_available
+                      ? "btn btn-primary active"
+                      : "btn btn-secondary"
+                  }
+                >
+                  <input
+                    type="radio"
+                    name="options"
+                    id="option2"
+                    autocomplete="off"
+                    checked={!this.state.stock_available}
+                    onClick={this.onChangeRadio}
+                  />{" "}
+                  No
+                </label>
+              </div>
+            </div>
+
+            <div className="form-group col-md-6">
+              <label htmlFor="">Condition &ensp; </label>
+              <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                <label
+                  className={
+                    this.state.condition === "New"
+                      ? "btn btn-primary active"
+                      : "btn btn-secondary"
+                  }
+                >
+                  <input
+                    type="radio"
+                    name="condition"
+                    id="condition1"
+                    autocomplete="off"
+                    checked={this.state.condition === "New" ? true : false}
+                    onClick={this.onChangeCondition}
+                  />{" "}
+                  New
+                </label>
+                <label
+                  className={
+                    this.state.condition === "Old"
+                      ? "btn btn-primary active"
+                      : "btn btn-secondary"
+                  }
+                >
+                  <input
+                    type="radio"
+                    name="condition"
+                    id="condition2"
+                    autocomplete="off"
+                    checked={this.state.condition === "Old" ? true : false}
+                    onClick={this.onChangeCondition}
+                  />{" "}
+                  Old
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group col-md-4">
+              <label htmlFor="publisher">Publisher</label>
+              <input
+                type="text"
+                className="form-control"
+                id="publisher"
+                placeholder="Enter Publisher's Name"
+                value={this.state.publisher}
+                onChange={this.handleInputChange}
+              />
+            </div>
+            <div className="form-group col-md-4">
+              <label htmlFor="genre">Genre</label>
+              <input
+                type="text"
+                className="form-control"
+                id="genre"
+                placeholder="Enter Genre"
+                value={this.state.genre}
+                onChange={this.handleInputChange}
+              />
+            </div>
+
+            <div className="form-group col-md-4">
+              <label htmlFor="goodreads_rating">Ratings</label>
+              <input
+                type="number"
+                className="form-control"
+                id="goodreads_rating"
+                placeholder="Enter Ratings"
+                value={this.state.goodreads_rating}
+                onChange={this.handleInputChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group col-md-6">
+              <label htmlFor="category">Category</label>
+              <input
+                type="text"
+                className="form-control"
+                id="category"
+                placeholder="Input Category"
+                value={this.state.category}
+                onChange={this.handleInputChange}
+              />
+            </div>
+
+            <div className="form-group col-md-6">
+              <label htmlFor="sub_category">Sub Category</label>
+              <input
+                type="text"
+                className="form-control"
+                id="sub_category"
+                placeholder="Input Sub Category"
+                value={this.state.sub_category}
+                onChange={this.handleInputChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="category_tags">Category tags</label>
+            <input
+              type="text"
+              className="form-control"
+              id="category_tags"
+              placeholder="Input Category Tags"
+              value={this.state.category_tags.join(",")}
+              onChange={this.handleCategoryTags}
             />
           </div>
 
